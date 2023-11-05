@@ -82,6 +82,17 @@ df.info()
 cond = df.loc[:, 'action'] == 'up' # --> series with dtype: bool
 print(cond)
 
+# Output:
+#
+# 2012-02-16 07:42:00    False
+# 2020-09-23 08:58:55    False
+# 2020-09-23 09:01:26    False
+# 2020-09-23 09:11:01    False
+# 2020-09-23 11:15:12     True
+# 2020-11-18 11:07:44     True
+# 2020-12-09 15:34:34    False
+# Name: action, dtype: bool
+
 # We can use this series as an indexer:
 # A series of booleans can be used to select rows that meet the criteria
 res = df.loc[cond]
@@ -101,6 +112,11 @@ new_cond = cond.array
 res = df.loc[new_cond]
 print(res)
 
+# Output
+#                               firm  action
+# date
+# 2020-09-23 11:15:12   Deutsche Bank     up
+# 2020-11-18 11:07:44  Morgan Stanley     up
 
 # Indexer not the same length as the dataframe
 #df.loc[cond[:-1]]   # --> raises an exception
@@ -124,13 +140,40 @@ print(df.loc[:, [True, False]])
 cond = df.loc[:, 'action'] == 'up'
 print(df.loc[cond, [False, True]])
 
+print(df.loc[cond, [False, True]])
+
+#                     action
+# date
+# 2020-09-23 11:15:12     up
+# 2020-11-18 11:07:44     up
+
 print(df.isna())
 
+# Output:
+#                       firm  action
+# date
+# 2012-02-16 07:42:00  False   False
+# 2020-09-23 08:58:55  False   False
+# 2020-09-23 09:01:26  False   False
+# 2020-09-23 09:11:01  False   False
+# 2020-09-23 11:15:12  False   False
+# 2020-11-18 11:07:44  False   False
+# 2020-12-09 15:34:34  False   False
 
 #df.loc[df.isna()]  # --> exception
 
 print(df[df.isna()])
 
+# Output:
+#                     firm  action
+# date
+# 2012-02-16 07:42:00  NaN    NaN
+# 2020-09-23 08:58:55  NaN    NaN
+# 2020-09-23 09:01:26  NaN    NaN
+# 2020-09-23 09:11:01  NaN    NaN
+# 2020-09-23 11:15:12  NaN    NaN
+# 2020-11-18 11:07:44  NaN    NaN
+# 2020-12-09 15:34:34  NaN    NaN
 
 # ----------------------------------------------------------------------------
 #   Using []
@@ -140,17 +183,48 @@ cond = df.loc[:, 'action'] == 'up'
 df['action'][cond] = "UP"
 print(df)
 
+# Output:
+#                                firm action
+# date
+# 2012-02-16 07:42:00       JP Morgan   main
+# 2020-09-23 08:58:55   Deutsche Bank   main
+# 2020-09-23 09:01:26   Deutsche Bank   main
+# 2020-09-23 09:11:01      Wunderlich   down
+# 2020-09-23 11:15:12   Deutsche Bank     UP
+# 2020-11-18 11:07:44  Morgan Stanley     UP
+# 2020-12-09 15:34:34       JP Morgan   main
+
 # Reverting...
 cond = df.loc[:, 'action'] == 'UP'
 df.loc[cond, 'action'] = 'up'
 print(df)
 
+# Output:
+#                                firm action
+# date
+# 2012-02-16 07:42:00       JP Morgan   main
+# 2020-09-23 08:58:55   Deutsche Bank   main
+# 2020-09-23 09:01:26   Deutsche Bank   main
+# 2020-09-23 09:11:01      Wunderlich   down
+# 2020-09-23 11:15:12   Deutsche Bank     up
+# 2020-11-18 11:07:44  Morgan Stanley     up
+# 2020-12-09 15:34:34       JP Morgan   main
 
 new_df = df.copy()
 cond = df.loc[:, 'action'] == 'up'
 new_df.loc[cond] = 'UP'
 print(new_df)
 
+# Output:
+#                               firm action
+# date
+# 2012-02-16 07:42:00      JP Morgan   main
+# 2020-09-23 08:58:55  Deutsche Bank   main
+# 2020-09-23 09:01:26  Deutsche Bank   main
+# 2020-09-23 09:11:01     Wunderlich   down
+# 2020-09-23 11:15:12             UP     UP
+# 2020-11-18 11:07:44             UP     UP
+# 2020-12-09 15:34:34      JP Morgan   main
 
 # ----------------------------------------------------------------------------
 #   Multiple criteria
@@ -159,8 +233,22 @@ print(new_df)
 crit = (df.loc[:, 'action'] == 'up') | (df.loc[:, 'action'] == 'down')
 print(df.loc[crit])
 
+# Output:
+#                                firm action
+# date
+# 2020-09-23 09:11:01      Wunderlich   down
+# 2020-09-23 11:15:12   Deutsche Bank     up
+# 2020-11-18 11:07:44  Morgan Stanley     up
+
 # ----------------------------------------------------------------------------
 #   Using the `str.contains` method
 # ----------------------------------------------------------------------------
 crit = df.loc[:, 'action'].str.contains('up|down')
 print(df.loc[crit])
+
+# Output:
+#                               firm  action
+# date
+# 2020-09-23 09:11:01      Wunderlich   down
+# 2020-09-23 11:15:12   Deutsche Bank     up
+# 2020-11-18 11:07:44  Morgan Stanley     up
