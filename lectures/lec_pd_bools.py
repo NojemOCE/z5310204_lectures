@@ -140,8 +140,6 @@ print(df.loc[:, [True, False]])
 cond = df.loc[:, 'action'] == 'up'
 print(df.loc[cond, [False, True]])
 
-print(df.loc[cond, [False, True]])
-
 #                     action
 # date
 # 2020-09-23 11:15:12     up
