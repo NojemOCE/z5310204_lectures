@@ -443,3 +443,5 @@ print(left.join(right, how='outer'))
 #   - Find intersection between ser.index and df.columns to apply operation over
 
 # df + scalar
+#   - scalar type has to make sense (just like ser + scalar)
+#   - scalar is applied to each element in the data frame
