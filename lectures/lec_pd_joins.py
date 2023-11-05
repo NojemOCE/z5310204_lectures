@@ -278,6 +278,8 @@ print(ones_by_cols)
 #  dtype: int64
 
 # This will produce a dataframe of NaN
+#   ones_by_dates.index is dates
+#   df.columns is ['bday', 'close']
 print(df + ones_by_dates)
 
 # Output:
@@ -296,6 +298,7 @@ print(df + ones_by_dates)
 
 # This will add one to each column
 print(df + ones_by_cols)
+# ones_by_cols.index matches df.columns
 
 # Output:
 #              bday  close
@@ -412,3 +415,31 @@ print(left.join(right, how='inner'))
 #                                             |4  |NaN| R4|
 #                                             |5  |NaN| R5|
 print(left.join(right, how='outer'))
+
+# Summary
+#   - the following uses the + operator, but this can be generalised to other operators like - and *
+
+# ser + scalar
+#   - scalar type has to make sense (string + int would raise an Exception)
+
+# ser1 + ser2
+#   - Creates a new series s3 containing the union of s1.index and s2.index (initialising all values to NaN)
+#   - Select the intersection of s1.index and s2.index
+#       - Applies the desired operation to corresponding elements from s1 and s2
+#       - Replace the NaN elements in s3 with this result
+
+# df1 + df2
+#   - Creates a new data frame with NaN as elements
+#       - Row index is the union of df1.index and df2.index
+#       - Column index is the union of df1.columns and df2.columns
+#   - Pandas will select the intersection of column and indexes
+#       - For this selection, the desired operation is applied to the corresponding elements of df1 and df2
+#       - Replaces the values in the new data frame for the corresponding row and column indices
+
+# df1 + ser1
+#   - Default behaviour is to align ser.index with df.columns and perform the operations row-wise
+#   - Create a data frame with the original df.index, but with the union of df.columns and ser.index as columns
+#       - Initialise result to NaN
+#   - Find intersection between ser.index and df.columns to apply operation over
+
+# df + scalar
